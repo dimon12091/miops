@@ -1,0 +1,4 @@
+apiVersion: v2
+name: mlops-test
+description: My Helm chart for the mlops_test application
+version: 0.1.0

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.fullname }}
+  labels:
+    app: {{ .Values.deployment.fullname }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.deployment.fullname }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployment.fullname }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: dermatology-volume
+              mountPath: /app/dermatology.data
+              subPath: dermatology.data
+            - mountPath: /app/model.cbm
+              name: myfile
+          command: [ "/bin/sh", "-c" ]
+          args: [ "python train.py" ]
+      volumes:
+        - name: dermatology-volume
+          configMap:
+            name: my-configmap
+        - name: myfile
+          hostPath:
+            path: /mnt/data/model.cbm
+            type: FileOrCreate
+      imagePullSecrets:
+        - name: {{ .Values.image.pullSecrets }}

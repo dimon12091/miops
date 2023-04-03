@@ -1,0 +1,13 @@
+replicaCount: 1
+
+#pvSize: 1Gi
+#pvcSize: 1Gi
+
+image:
+  repository: wolfmoon69/mlops_test
+  tag: latest
+  pullPolicy: Always
+  pullSecrets: regcred
+
+deployment:
+  fullname: mlops-test-deployment
